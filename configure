@@ -2272,6 +2272,21 @@ if test "$disable_native" = "no" && test "$disable_opt" != "yes" && \
 fi
 print_config "Build march=native" "$build_native"
 
+##########################################
+# check for gettid()
+gettid="no"
+cat > $TMPC << EOF
+#include <unistd.h>
+int main(int argc, char **argv)
+{
+  return gettid();
+}
+EOF
+if compile_prog "" "" "gettid"; then
+  gettid="yes"
+fi
+print_config "gettid" "$gettid"
+
 #############################################################################
 
 if test "$wordsize" = "64" ; then
@@ -2536,6 +2551,9 @@ if test "$mkdir_two" = "yes" ; then
 fi
 if test "$march_set" = "no" && test "$build_native" = "yes" ; then
   output_sym "CONFIG_BUILD_NATIVE"
+fi
+if test "$gettid" = "yes"; then
+  output_sym "CONFIG_HAVE_GETTID"
 fi
 
 echo "LIBS+=$LIBS" >> $config_host_mak
