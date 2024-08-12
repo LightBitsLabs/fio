@@ -14,6 +14,11 @@
 #include <errno.h>
 #include <sched.h>
 #include <linux/unistd.h>
+#ifndef NO_HAVE_RAW
+#include <linux/raw.h>
+#else
+#include <sys/raw.h>
+#endif
 #include <linux/major.h>
 #include <linux/fs.h>
 #include <scsi/sg.h>
